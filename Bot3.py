@@ -94,7 +94,6 @@ def play_wordle(target_word, initial_guesses=None, verbose=True):
     return None
 
 
-# --- Multi-word Tester ---
 def test_multiple_words(target_words):
     results = []
     for word in target_words:
@@ -105,40 +104,41 @@ def test_multiple_words(target_words):
     print("\n\n=== RESULTS ===")
     for word, tries in results:
         print(f"{word.upper()}: {tries if tries else 'Failed'} guesses")
-     # Compute averages and counts
-    avg_all = sum(valid_results) / len(valid_results)
-    above_five = [t for t in valid_results if t > 5]
-    avg_under_five = (
-        sum(t for t in valid_results if t <= 5) / len([t for t in valid_results if t <= 5])
-        if any(t <= 5 for t in valid_results)
-        else None
-    )
 
-    print(f"\n📊 Average guesses (all): {avg_all:.2f}")
-    print(f"⏱️  Words failed (>5 guesses): {len(above_five)} / {len(valid_results)}")
-    if avg_under_five is not None:
-        print(f"✨ Average (≤5 guesses only): {avg_under_five:.2f}")
-    else:
-        print("✨ Average (≤5 guesses only): N/A — all took more than 5 guesses")
-
-    # Filter valid (solved) results
-    valid_results = [t for _, t in results if t]
+    # --- Fix: define valid_results BEFORE doing any math ---
+    valid_results = [t for _, t in results if t is not None]
     if not valid_results:
         print("\nNo words were solved — check your word list.")
         return
+
+    # --- Compute averages and stats ---
+    avg_all = sum(valid_results) / len(valid_results)
+    above_five = [t for t in valid_results if t > 5]
+    below_or_equal_five = [t for t in valid_results if t <= 5]
+    avg_under_five = (
+        sum(below_or_equal_five) / len(below_or_equal_five)
+        if below_or_equal_five else None
+    )
+
+    print(f"\nTotal average guesses: {avg_all:.2f}")
+    print(f"Games lost: {len(above_five)} / {len(valid_results)}")
+    if avg_under_five is not None:
+        print(f"Average in won games(≤5 guesses only): {avg_under_five:.2f}")
+    else:
+        print("✨ Average (under 5 guesses only): N/A — you suck")
 
    
 
 
 # --- Interactive Input ---
 if __name__ == "__main__":
-    print("Welcome to Wordle Solver!\n")
-    mode = input("Type '1' to test multiple words, or '2' to manually input today's word: ").strip()
+    print("\n\n                 ˖°❀⋆.ೃ࿔*:･===============·༻𐫱༺·==================･:*ೃ.⋆❀°˖\n                            Welcome to Wordle Solver!\n                 ˖°❀⋆.ೃ࿔*:･=================================･:*ೃ.⋆❀°˖")
+    mode = input("Type '1' to test multiple words at once, or '2' to manually input today's word: ").strip()
 
     if mode == "1":
-        print("\nEnter up to 10 target words (press Enter on a blank line to finish):")
+        print("\nEnter up to 100 target words (press Enter on a blank line to start):")
         targets = []
-        while len(targets) < 10:
+        while len(targets) < 100:
             word = input(f"Word #{len(targets)+1}: ").strip().lower()
             if not word:
                 break
