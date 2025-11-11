@@ -119,11 +119,15 @@ def test_multiple_words(target_words):
         sum(below_or_equal_five) / len(below_or_equal_five)
         if below_or_equal_five else None
     )
+    Winrate = (len(below_or_equal_five) / len(valid_results)) * 100
 
+    print("\n=== STATISTICS ===")
+    print(f"Total words tested: {len(valid_results)}")
     print(f"\nTotal average guesses: {avg_all:.2f}")
     print(f"Games lost: {len(above_five)} / {len(valid_results)}")
+    print(f"Winrate (≤5 guesses): {Winrate:.2f}%")
     if avg_under_five is not None:
-        print(f"Average in won games(≤5 guesses only): {avg_under_five:.2f}")
+        print(f"Average in won games(≤5 guesses): {avg_under_five:.2f}")
     else:
         print("✨ Average (under 5 guesses only): N/A — you suck")
 
@@ -132,21 +136,21 @@ def test_multiple_words(target_words):
 
 # --- Interactive Input ---
 if __name__ == "__main__":
-    print("\n\n                 ˖°❀⋆.ೃ࿔*:･===============·༻𐫱༺·==================･:*ೃ.⋆❀°˖\n                            Welcome to Wordle Solver!\n                 ˖°❀⋆.ೃ࿔*:･=================================･:*ೃ.⋆❀°˖")
+    print("\n\n              ˖°❀⋆.ೃ࿔*:･===============·༻𐫱༺·==================･:*ೃ.⋆❀°˖\n                            Welcome to Wordle Solver!\n                 ˖°❀⋆.ೃ࿔*:･=================================･:*ೃ.⋆❀°˖")
     mode = input("Type '1' to test multiple words at once, or '2' to manually input today's word: ").strip()
 
     if mode == "1":
-        print("\nEnter up to 100 target words (press Enter on a blank line to start):")
-        targets = []
-        while len(targets) < 100:
-            word = input(f"Word #{len(targets)+1}: ").strip().lower()
-            if not word:
-                break
-            if len(word) != 5 or not word.isalpha():
-                print("❌ Must be a 5-letter alphabetic word.")
-                continue
-            targets.append(word)
-        test_multiple_words(targets)
+        try:
+            with open("AnswerWords.txt") as f:
+                targets = [line.strip().lower() for line in f if len(line.strip()) == 5 and line.strip().isalpha()]
+            if not targets:
+                print("❌ No valid 5-letter words found in AnswerWords.txt.")
+            else:
+                print(f"\n📘 Loaded {len(targets)} target words from AnswerWords.txt:")
+                print(", ".join(targets))
+                test_multiple_words(targets)
+        except FileNotFoundError:
+            print("❌ File 'AnswerWords.txt' not found! Please create it in the same folder as this script.")
 
     elif mode == "2":
         while True:
@@ -157,5 +161,6 @@ if __name__ == "__main__":
                 print("❌ Must be a 5-letter alphabetic word.")
                 continue
             play_wordle(word)
+
     else:
         print("Invalid choice — exiting.")
