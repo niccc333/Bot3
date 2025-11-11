@@ -74,7 +74,7 @@ def play_wordle(target_word, initial_guesses=None, verbose=True):
             print(f"Guess {attempt}: {guess.upper()}  →  Feedback: {feedback}")
         if feedback == "ggggg":
             if verbose:
-                print(f"\n✅ Solved in {attempt} guesses! ({guess.upper()})")
+                print(f"\n----------------------------------------------------\n ;p Solved in {attempt} guesses! ({next_guess.upper()})\n----------------------------------------------------\n")
             return attempt
         possible_words = filter_words(possible_words, guess, feedback)
         if verbose:
@@ -89,7 +89,7 @@ def play_wordle(target_word, initial_guesses=None, verbose=True):
             print(f"Guess {attempt}: {next_guess.upper()}  →  Feedback: {feedback}")
         if feedback == "ggggg":
             if verbose:
-                print(f"\n✅ Solved in {attempt} guesses! ({next_guess.upper()})")
+                print(f"\n----------------------------------------------------\n ;p Solved in {attempt} guesses! ({next_guess.upper()})\n----------------------------------------------------\n")
             return attempt
         possible_words = filter_words(possible_words, next_guess, feedback)
         if verbose:
@@ -99,11 +99,11 @@ def play_wordle(target_word, initial_guesses=None, verbose=True):
         attempt += 1
 
     if verbose:
-        print("\n❌ No possible words remain — failed to find the answer.")
+        print("\n ;( No possible words remain — failed to solve today's wordle.")
     return None
 
 # --- Example runs ---
 if __name__ == "__main__":
     # Replace with whichever target you want to simulate
-    play_wordle("tabby")
+    play_wordle("wryly")
   
