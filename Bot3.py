@@ -113,8 +113,8 @@ def test_multiple_words(target_words):
 
     # --- Compute averages and stats ---
     avg_all = sum(valid_results) / len(valid_results)
-    above_five = [t for t in valid_results if t > 5]
-    below_or_equal_five = [t for t in valid_results if t <= 5]
+    above_five = [t for t in valid_results if t > 6]
+    below_or_equal_five = [t for t in valid_results if t <= 6]
     avg_under_five = (
         sum(below_or_equal_five) / len(below_or_equal_five)
         if below_or_equal_five else None
@@ -125,9 +125,9 @@ def test_multiple_words(target_words):
     print(f"Total words tested: {len(valid_results)}")
     print(f"\nTotal average guesses: {avg_all:.2f}")
     print(f"Games lost: {len(above_five)} / {len(valid_results)}")
-    print(f"Winrate (≤5 guesses): {Winrate:.2f}%")
+    print(f"Winrate: {Winrate:.2f}%")
     if avg_under_five is not None:
-        print(f"Average in won games(≤5 guesses): {avg_under_five:.2f}")
+        print(f"Average in won games(≤6 guesses): {avg_under_five:.2f}")
     else:
         print("✨ Average (under 5 guesses only): N/A — you suck")
 
